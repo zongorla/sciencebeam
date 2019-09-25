@@ -11,6 +11,8 @@ class MimeTypes:
     TEI_XML = 'application/tei+xml'
     JATS_XML = 'application/vnd.jats+xml'
     JSON = 'application/json'
+    LATEX = "application/x-latex"
+    ZIP = "application/zip"
 
 
 # fixed mime type suffix map (which may be incorrectly defined in Python 3.5)

@@ -71,7 +71,8 @@ def run_grobid_service(item, base_url, path, start_service=True, field_name=None
             files={'input': (filename, BytesIO(content))},
             data={
                 'consolidateHeader': '0',
-                'consolidateCitations': '0'
+                'consolidateCitations': '0',
+                "teiCoordinates":'figure',
             }
         )
     response.raise_for_status()

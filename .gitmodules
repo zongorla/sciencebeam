@@ -1,0 +1,6 @@
+[submodule "xslt/Stylesheets"]
+	path = xslt/Stylesheets
+	url = https://github.com/zongorla/Stylesheets.git
+[submodule "teiconverter/Stylesheets"]
+	path = teiconverter/Stylesheets
+	url = https://github.com/TEIC/Stylesheets.git

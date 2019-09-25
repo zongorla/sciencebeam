@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /opt/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.5.3" ident="GROBID" when="2019-09-24T15:58+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">The Performance of Multi-Path TCP with Overlapping Paths</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Lajos</forename><surname>Zongor</surname></persName>
+							<email>zongor@tmit.bme.hu</email>
+							<affiliation key="aff0">
+								<orgName type="laboratory">MTA-BME Future Internet Research Group and MTA-BME Information Systems Research Group</orgName>
+								<orgName type="institution">Budapest University of Technology and Economics (BME)</orgName>
+								<address>
+									<country key="HU">Hungary</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Zalán</forename><surname>Heszberger</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="laboratory">MTA-BME Future Internet Research Group and MTA-BME Information Systems Research Group</orgName>
+								<orgName type="institution">Budapest University of Technology and Economics (BME)</orgName>
+								<address>
+									<country key="HU">Hungary</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Alija</forename><surname>Pašić</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="laboratory">MTA-BME Future Internet Research Group and MTA-BME Information Systems Research Group</orgName>
+								<orgName type="institution">Budapest University of Technology and Economics (BME)</orgName>
+								<address>
+									<country key="HU">Hungary</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">János</forename><surname>Tapolcai</surname></persName>
+							<email>tapolcai@tmit.bme.hu</email>
+							<affiliation key="aff0">
+								<orgName type="laboratory">MTA-BME Future Internet Research Group and MTA-BME Information Systems Research Group</orgName>
+								<orgName type="institution">Budapest University of Technology and Economics (BME)</orgName>
+								<address>
+									<country key="HU">Hungary</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">The Performance of Multi-Path TCP with Overlapping Paths</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1145/3342280.3342328</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<abstract>
+				<p>Turning the Internet into a multi-path environment could solve many difficulties network operators are facing today. There are already solutions to configure an IP network to offer multiple partially disjoint paths towards the destination. In this demo, we focus on the performance of how MPTCP can distribute the traffic along these paths. When the routes are not fully disjoint their throughput could be limited by some bottleneck links. Because of this dependency finding the maximal throughput in MPTCP may call for solving a complex maximization problem. Through constructing an example network as an illustrative model of real network conditions, we show, how complicated the underlying optimization problem MPTCP may face, and through measurements, demonstrate how the various congestion mechanisms deal with finding a solution.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>Offering a selection of forwarding paths to the end-users of the Internet, who in turn monitor, control, and optimize their sending rate along these paths in an end-to-end fashion, would improve endto-end reliability, security, and latency by allowing users to avoid congested links, and even provide some control to applications to meet their performance requirements <ref type="bibr" target="#b0">[1,</ref><ref type="bibr" target="#b3">4,</ref><ref type="bibr" target="#b4">5]</ref>. The promising technique to allow end-systems to influence path selection securely is tagging <ref type="bibr" target="#b2">[3]</ref>. Tags are some short identifiers that are part of the header and can be used to control the route of the packet. The identifier has no global meaning, and the routing is deterministic, meaning that packets with the same tag always routed along the same path towards the destinations. There are many proposals to implement tagging: either as a shim protocol header or overloading specific bits in the IP header field <ref type="bibr" target="#b2">[3]</ref>, or through the hashing used in equal-cost multi-path routing (ECMP) <ref type="bibr" target="#b3">[4]</ref>.</p><p>Another mechanism that is readily available for multi-path Internet is Multi-Path TCP (MPTCP) <ref type="bibr" target="#b0">[1]</ref>, which could end-to-end monitor, control, and optimize the sending rate along these paths. MPTCP extends TCP so that a single connection can be striped across multiple sub-flows, each being a TCP session along a unique path. MPTCP became a part of Linux, iOS, and OSx operating systems since 2013, and presents the same socket interface as TCP. The primary use case of MPTCP is when the host is connected Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than ACM must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from permissions@acm.org. SIGCOMM <ref type="bibr">Posters and Demos '19, August 19-23, 2019</ref>  to the internet through multiple wireless networks; such as both Wi-Fi and cellular networks. However, in this use case the delay and bandwidth characteristics of the paths used by MPTCP are mostly independent. In this paper, we are mainly focusing on how MPTCP behaves if there are common bottleneck links along the paths MPTCP is running on. We set up a carefully constructed model of networking environments, where the paths are competing for the same resources, and thus sending more packets to one path degrades the throughput on the other. In the demo, we attempt to compile stirring networking scenarios where finding the optimal performance is a challenging optimization task. In the rest of the paper, we explain one use-case of the demo in detail, where the efficiency of some MPTCP congestion control mechanisms is demonstrated in searching for the optimal throughput by balancing the transmission rate between paths whose characteristics depend on each other. <ref type="figure" target="#fig_0">Fig. 1a</ref> shows the network we have constructed to measure the MPTCP performance. <ref type="figure" target="#fig_0">Fig. 1b</ref> shows the three paths the MPTCP at node s can select to communicate with node d. The capacities are written next to the links unless they are the default 100. Let x i denote the throughput of the i th path for i = 1, 2, 3. In this case Path 1 and Path 2 have a common link s − v 1 with capacity 40, which means we have the following inequality x 1 + x 2 ≤ 40. Similarly we have x 2 + x 3 ≤ 60, x 1 + x 3 ≤ 80. Informally speaking we have three bottleneck links corresponding to each pair of paths. It means the MPTCP load balancer is facing a multidimensional optimization problem with the following objective function max x 1 + x 2 + x 3 . Solving the above linear program we get the following optimal solution x 1 = 10, x 2 = 30, and x 3 = 50, which is 90 altogether. In the measurement setup we are interested in whether the MPTCP congestion mechanism can find the optimal throughput or not. Note that the above problem is a convex optimization, therefore, there is a single (global) maximum. Convex optimization is often solved with some type of gradient descent method, which is an iterative approach always stepping towards the gradient (also called steepest descent). On the other hand, MPTCP controls the rate of each TCP path together to find the largest total throughput. In the above settings the simplest greedy approach to increase the rates independently would give a suboptimal solution.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">METHODOLOGY 2.1 Setup</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Measurement</head><p>We used version 0.94 of the Multipath TCP linux kernel, and Mininet for the network simulation. To make MPTCP use preselected paths in the model network a tagging mechanism is used by applying 3 different tags on the packets of the subflows corresponding to the 3 different paths. We modified the ndiffports <ref type="bibr" target="#b3">[4]</ref> path-manager to tag each subflow. The exact tags and the number of subflows is given as an argument for our path-manager module. We used the default MPTCP scheduler, and run the measurements with three congestion control algorithms: CUBIC (the default in Linux), and LIA (Linked Increase algorithm) <ref type="bibr" target="#b5">[6]</ref> and OLIA (Opportunistic Linked Increase Algorithm) <ref type="bibr" target="#b1">[2]</ref>.For traffic generation we used iperf, and captured the data stream by tshark at the destination node. Then we filtered the captured packets based on the tags, to determine how did the MPTCP protocol split them among the subflows. <ref type="figure" target="#fig_1">Fig. 2</ref> shows our measurement results, where an MPTCP connection was established with Path 2 as default shortest path (with the shortest round trip time) and Path 1 and Path 3 as additional routes to the destination node. Note that the default shortest path has a maximal capacity of 40 Mbps. The figure shows the throughput of each flow sampled with 10 or 100ms by tshark at the receiver side. <ref type="figure" target="#fig_1">Fig. 2(a)</ref> shows that MPTCP-CUBIC first increases the transmission rate on the default shortest path (Path 2) reaching the capacity of the bottleneck link (s, v 1 ), and subsequently increases the rate along Path 1 and 3 up to the corresponding bottleneck capacities: 60 Mbps on Path 1 at 0.05s and 80 Mbps on Path 3 at 0.15s. At this point, we have a Pareto optimal solution as none of the TCP rates can be increased independently. On the other hand, decreasing the rate of Path 2 by x would increase the rate for both Path 1 and 3 by <ref type="bibr">2x</ref> altogether. In the next 3 seconds, using its default congestion control algorithm the MPTCP is capable of finding the optimal throughput by rearranging the bandwidth on the different paths. Note that in case of CUBIC there is no interaction between the individual TCP congestion control actions. The success of MPTCP is likely due to the sawtooth nature of the TCP: when there is a packet drop along Path 2, the rate is reduced, meanwhile there is a chance to increase the rate on Path 1 or 3, see <ref type="figure" target="#fig_1">Fig. 2(c)</ref>. At that point, the rate cannot be increased on Path 2, but can be on either of the paths. Intuitively speaking MPTCP does not stick in a deadlock but can "shake down" into rates giving the optimal throughput.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">RESULTS</head><p>In our experiments, the default (CUBIC) congestion control algorithm always reached the optimum; however, later, the throughput was unstable for short periods. The more stable LIA never could reach the optimum, while OLIA was able to reach the optimum in many measurements, but only if Path 2 was the default shortest path among the three. See <ref type="figure" target="#fig_1">Fig. 2(b)</ref> for an example where it did not find the optimum. Note that OLIA had the slowest convergence time: it took 20 sec in the above example network to reach the optimum, but after that the throughput was stable.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">CONCLUSIONS</head><p>In this demo, we set up a network topology and multiple routes between a source-destination pair, where MPTCP must perform a sophisticated optimization process to achieve the optimal throughput. We demonstrate that certain congestion mechanisms of MPTCP are capable of converging to the optimal solution while others cannot. The success of CUBIC is most likely stemming from the asynchronous controlling actions at the individual TCP paths inherently eventuating the required gradient optimization over the flows.</p></div>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="1,344.69,331.35,186.78,8.47"><head>Figure 1 :</head><label>1</label><figDesc>Figure 1: Illustration of the network topology</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="2,114.62,220.63,380.77,7.53"><head>Figure 2 :</head><label>2</label><figDesc>Figure 2: MPTCP throughput with CUBIC and OLIA congestion control algorithms measured with tshark.</figDesc></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS</head><p>The research leading to these results was partially supported by the High Speed Networks Laboratory (HSNLab). Project no. 123957, 129589, 124171, 128062 and 124171 has been implemented with the support provided from the National Research, Development and Innovation Fund of Hungary, financed under the FK_17, KH_18, K_17, K_18 and K_17 funding schemes respectively. The research report in this paper was also supported by the BME-Artificial Intelligence FIKP grant of EMMI (BME FIKP-MI/SC). Z. Heszberger was supported by the János Bolyai Fellowship of the Hungarian Academy of Sciences.</p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct xml:id="b0">
+	<analytic>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">O</forename><surname>Bonaventure</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Handley</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Raiciu</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">An Overview of Multipath TCP. Usenix ;login: magazine</title>
+		<imprint>
+			<biblScope unit="volume">37</biblScope>
+			<date type="published" when="2012-10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b1">
+	<analytic>
+		<title level="a" type="main">MPTCP Is Not ParetoOptimal: Performance Issues and a Possible Solution</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Khalili</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">N</forename><surname>Gast</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Popovic</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J.-Y. Le</forename><surname>Boudec</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE/ACM Transactions on Networking</title>
+		<imprint>
+			<biblScope unit="volume">21</biblScope>
+			<biblScope unit="page" from="1651" to="1665" />
+			<date type="published" when="2013-10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b2">
+	<monogr>
+				<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Murtaza</forename><surname>Motiwala</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Megan</forename><surname>Elmore</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Nick</forename><surname>Feamster</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Santosh</forename><surname>Vempala</surname></persName>
+		</author>
+		<title level="m">Path Splicing. In ACM SIGCOMM</title>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="27" to="38" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Improving datacenter performance and robustness with multipath TCP</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Raiciu</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Barre</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Pluntke</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Greenhalgh</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Wischik</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Handley</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ACM SIGCOMM CCR</title>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="volume">41</biblScope>
+			<biblScope unit="page" from="266" to="277" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Low Latency via Redundancy</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ashish</forename><surname>Vulimiri</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><forename type="middle">Brighten</forename><surname>Godfrey</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Radhika</forename><surname>Mittal</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Justine</forename><surname>Sherry</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Sylvia</forename><surname>Ratnasamy</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Scott</forename><surname>Shenker</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">CoNEXT</title>
+		<imprint>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Design, Implementation and Evaluation of Congestion Control for Multipath TCP</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Wischik</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Raiciu</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Greenhalgh</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Handley</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. USENIX NSDI</title>
+		<meeting>USENIX NSDI<address><addrLine>Berkeley, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="99" to="112" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

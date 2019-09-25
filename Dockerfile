@@ -5,6 +5,7 @@ FROM python:3.5.7-buster
 RUN apt-get update \
   && apt-get install -y \
     libreoffice-writer \
+    default-jre ant pdf2svg zip\
     fonts-liberation fonts-liberation2 \
     fonts-crosextra-carlito fonts-crosextra-caladea \
     fontconfig \
