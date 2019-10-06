@@ -314,7 +314,11 @@
   </xsl:template>
 
   <xsl:template match="tei:head">
-    <title><xsl:value-of select="."/></title>
+    <title>
+      <xsl:attribute name='n'>
+              <xsl:value-of select="@n"/>
+      </xsl:attribute>
+      <xsl:value-of select="."/></title>
   </xsl:template>
 
   <xsl:template match="tei:title">
